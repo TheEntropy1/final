@@ -2,28 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ details.title or details.name }} - Ureka.</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Ureka. - {{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .player-container {
+            position: relative;
+            padding-top: 56.25%;
+        }
+        .player-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-dark text-light">
 
-<header>
-    <h1>{{ details.title or details.name }}</h1>
-</header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Ureka.</a>
+        </div>
+    </nav>
 
-<div class="video-container">
-    <iframe src="https://vidsrc.to/embed/{{ media_type }}/{{ tmdb_id }}" frameborder="0" allowfullscreen></iframe>
-</div>
+    <div class="container my-4">
+        <h2 class="text-center mb-3">{{ title }} ({{ year }})</h2>
+        <p class="text-center text-muted mb-4">{{ overview }}</p>
 
-<section>
-    <h2>Overview</h2>
-    <p>{{ details.overview }}</p>
-    <h3>Year: {{ details.release_date or details.first_air_date }}</h3>
-</section>
+        {% if seasons %}
+        <div class="row mb-3">
+            <div class="col-6">
+                <select class="form-select" id="seasonSelect" onchange="updateEpisodeDropdown()">
+                    {% for season in seasons %}
+                    <option value="{{ season['season_number'] }}">Season {{ season['season_number'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6">
+                <select class="form-select" id="episodeSelect" onchange="changeEpisode()">
+                    <!-- Episodes will be populated dynamically -->
+                </select>
+            </div>
+        </div>
+        {% endif %}
 
-<footer>
-    <p>A Prakhar Solanki Production | <a href="https://instagram.com/prakhar.5898" target="_blank">Follow me</a></p>
-</footer>
+        <div class="player-container mb-4">
+            <iframe id="playerFrame" src="{{ embed_url }}" allowfullscreen frameborder="0"></iframe>
+        </div>
 
+        <div class="text-center">
+            <a href="{{ subtitle_url }}" class="btn btn-outline-light btn-sm mb-3" download>Download Subtitles</a>
+        </div>
+    </div>
+
+    <footer class="text-center text-muted py-3">
+        <p>A Prakhar Solanki Production</p>
+        <a href="https://instagram.com/prakhar.5898" class="text-decoration-none text-light" target="_blank">Follow me on Instagram</a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const allSeasons = {{ seasons_json|safe }};
+
+        function updateEpisodeDropdown() {
+            const seasonNo = document.getElementById('seasonSelect').value;
+            const episodeSelect = document.getElementById('episodeSelect');
+            episodeSelect.innerHTML = '';
+
+            const selectedSeason = allSeasons.find(s => s.season_number == seasonNo);
+            if (selectedSeason) {
+                selectedSeason.episodes.forEach(ep => {
+                    const option = document.createElement('option');
+                    option.value = ep.episode_number;
+                    option.text = 'Episode ' + ep.episode_number;
+                    episodeSelect.appendChild(option);
+                });
+            }
+        }
+
+        function changeEpisode() {
+            const seasonNo = document.getElementById('seasonSelect').value;
+            const episodeNo = document.getElementById('episodeSelect').value;
+            const iframe = document.getElementById('playerFrame');
+            iframe.src = `/watch_episode/{{ id }}/${seasonNo}/${episodeNo}`;
+        }
+
+        {% if seasons %}
+        updateEpisodeDropdown();
+        {% endif %}
+    </script>
 </body>
 </html>
