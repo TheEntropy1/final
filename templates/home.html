@@ -1,117 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Ureka. - Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #0f0f0f;
-      color: #f0f0f0;
-    }
-    .movie-card img {
-      border-radius: 12px;
-      height: 200px;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-    .movie-card img:hover {
-      transform: scale(1.05);
-    }
-    .section-title {
-      margin: 20px 0 10px;
-      font-size: 1.5rem;
-    }
-    .slider {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      gap: 15px;
-    }
-    .slider::-webkit-scrollbar {
-      display: none;
-    }
-    .movie-card {
-      flex: 0 0 auto;
-      scroll-snap-align: start;
-      width: 150px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Ureka. - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body>
+    <header>
+        <h1>Ureka.</h1>
+        <form action="/search" method="get">
+            <input type="text" name="query" placeholder="Search for Movies, Series, Anime..." required>
+        </form>
+    </header>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-black">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Ureka.</a>
-    </div>
-  </nav>
+    <section class="slider">
+        <h2>Trending Movies</h2>
+        <div class="scroll-container">
+            {% for movie in trending_movies %}
+            <a href="/watch/movie/{{ movie.id }}" class="card">
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+                <p>{{ movie.title }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
-  <div class="container my-4">
+    <section class="slider">
+        <h2>Trending Series</h2>
+        <div class="scroll-container">
+            {% for series in trending_series %}
+            <a href="/watch/tv/{{ series.id }}" class="card">
+                <img src="https://image.tmdb.org/t/p/w500{{ series.poster_path }}" alt="{{ series.name }}">
+                <p>{{ series.name }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
-    <form method="GET" action="/search" class="d-flex mb-4">
-      <input class="form-control me-2" type="search" placeholder="Search Movies, Series, Anime..." name="query" required>
-      <button class="btn btn-outline-light" type="submit">Search</button>
-    </form>
+    <section class="slider">
+        <h2>Trending Anime</h2>
+        <div class="scroll-container">
+            {% for anime in trending_anime %}
+            <a href="/watch/tv/{{ anime.id }}" class="card">
+                <img src="https://image.tmdb.org/t/p/w500{{ anime.poster_path }}" alt="{{ anime.name }}">
+                <p>{{ anime.name }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
-    <h3 class="section-title">Trending Movies</h3>
-    <div class="slider">
-      {% for movie in trending_movies %}
-      <div class="movie-card">
-        <a href="/watch/{{ movie.id }}">
-          <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="img-fluid">
-          <p class="mt-2 small text-center">{{ movie.title }}</p>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-
-    <h3 class="section-title">Trending Series</h3>
-    <div class="slider">
-      {% for series in trending_series %}
-      <div class="movie-card">
-        <a href="/watch/{{ series.id }}">
-          <img src="{{ series.poster }}" alt="{{ series.title }}" class="img-fluid">
-          <p class="mt-2 small text-center">{{ series.title }}</p>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-
-    <h3 class="section-title">Trending Anime</h3>
-    <div class="slider">
-      {% for anime in trending_anime %}
-      <div class="movie-card">
-        <a href="/watch/{{ anime.id }}">
-          <img src="{{ anime.poster }}" alt="{{ anime.title }}" class="img-fluid">
-          <p class="mt-2 small text-center">{{ anime.title }}</p>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-
-    <h3 class="section-title">Top IMDb Movies</h3>
-    <div class="slider">
-      {% for top in top_imdb %}
-      <div class="movie-card">
-        <a href="/watch/{{ top.id }}">
-          <img src="{{ top.poster }}" alt="{{ top.title }}" class="img-fluid">
-          <p class="mt-2 small text-center">{{ top.title }}</p>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-
-  </div>
-
-  <footer class="text-center text-muted py-3">
-    <p>A Prakhar Solanki Production</p>
-    <a href="https://instagram.com/prakhar.5898" class="text-decoration-none text-light" target="_blank">Follow me on Instagram</a>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <footer>
+        <p>A Prakhar Solanki Production | <a href="https://instagram.com/prakhar.5898" target="_blank">Follow me on Instagram</a></p>
+    </footer>
 </body>
 </html>
