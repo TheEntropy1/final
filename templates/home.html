@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ureka. - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Ureka.</h1>
+</header>
+
+<form action="/search" method="post">
+    <input type="text" name="query" placeholder="Search Movies/Series/Anime..." required>
+    <button type="submit">Search</button>
+</form>
+
+<section>
+    <h2>Trending Movies</h2>
+    <div class="card-grid">
+        {% for movie in movies %}
+        <a href="/watch/movie/{{ movie.id }}">
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Trending Series</h2>
+    <div class="card-grid">
+        {% for s in series %}
+        <a href="/watch/tv/{{ s.id }}">
+            <img src="https://image.tmdb.org/t/p/w500{{ s.poster_path }}" alt="{{ s.name }}">
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Trending Anime</h2>
+    <div class="card-grid">
+        {% for a in anime %}
+        <a href="/watch/tv/{{ a.id }}">
+            <img src="https://image.tmdb.org/t/p/w500{{ a.poster_path }}" alt="{{ a.name }}">
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<footer>
+    <p>A Prakhar Solanki Production | <a href="https://instagram.com/prakhar.5898" target="_blank">Follow me</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ details.title or details.name }} - Ureka.</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>{{ details.title or details.name }}</h1>
+</header>
+
+<div class="video-container">
+    <iframe src="https://vidsrc.to/embed/{{ media_type }}/{{ tmdb_id }}" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<section>
+    <h2>Overview</h2>
+    <p>{{ details.overview }}</p>
+    <h3>Year: {{ details.release_date or details.first_air_date }}</h3>
+</section>
+
+<footer>
+    <p>A Prakhar Solanki Production | <a href="https://instagram.com/prakhar.5898" target="_blank">Follow me</a></p>
+</footer>
+
+</body>
+</html>

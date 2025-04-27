@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ureka. - Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Search Results</h1>
+</header>
+
+<div class="card-grid">
+    {% for result in results %}
+    <a href="/watch/{{ result.media_type }}/{{ result.id }}">
+        <img src="https://image.tmdb.org/t/p/w500{{ result.poster_path }}" alt="{{ result.title or result.name }}">
+    </a>
+    {% endfor %}
+</div>
+
+<footer>
+    <p>A Prakhar Solanki Production | <a href="https://instagram.com/prakhar.5898" target="_blank">Follow me</a></p>
+</footer>
+
+</body>
+</html>
